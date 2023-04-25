@@ -5,7 +5,8 @@
 #include <time.h>
 using namespace std;
 
-int map[10][10] = {0}; //0~8を数字ますとする 9は旗 -1は爆弾
+int map[10][10] = {0}; //0~8を数字ます、-1を爆弾マスとする
+int bomb[12][12] = {0};
 bool opened[10][10] = {0};
 
 int selected_x = 0;
@@ -17,6 +18,7 @@ bool firstclick = true;
 
 void write_map();
 void place_bomb();
+void place_number();
 
 int main()
 {
@@ -74,7 +76,7 @@ void write_map()
             else if(!opened[i][j])
             {
                 cout << "■" << ' ';
-            } 
+            }
             else
             {
                 switch(map[i][j])
@@ -83,7 +85,14 @@ void write_map()
                     cout << 'X' << ' ';
                     break;
                     default:
-                    cout << "・";
+                    if(bomb[i+1][j+1] == 0)
+                    {
+                        cout << "・";
+                    }
+                    else
+                    {
+                        cout << bomb[i+1][j+1] << ' ';
+                    }
                     break;
                 }
             }
@@ -108,7 +117,20 @@ void place_bomb()
         else
         {
             map[bomb_y][bomb_x] = -1;
+            bomb_x++;
+            bomb_y++;
+            bomb[bomb_y-1][bomb_x-1]++;
+            bomb[bomb_y-1][bomb_x]++;
+            bomb[bomb_y-1][bomb_x+1]++;
+            bomb[bomb_y][bomb_x-1]++;
+            bomb[bomb_y][bomb_x+1]++;
+            bomb[bomb_y+1][bomb_x-1]++;
+            bomb[bomb_y+1][bomb_x]++;
+            bomb[bomb_y+1][bomb_x+1]++;
+
         }
     }
     
 }
+
+    
