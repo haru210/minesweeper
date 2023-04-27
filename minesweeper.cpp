@@ -11,10 +11,12 @@ bool opened[10][10] = {0};
 
 int selected_x = 0;
 int selected_y = 0;
+int open_cnt = 0;
 
 bool gameend = false;
 bool firstclick = true;
-
+bool gameover = false;
+bool gameclear = false;
 
 void write_map();
 void place_bomb();
@@ -48,7 +50,18 @@ int main()
             if(map[selected_y][selected_x] != -1)
             {
                 opened[selected_y][selected_x] = true;
+                open_cnt++;
+                if(open_cnt >= 90)
+                {
+                    gameend = true;
+                    gameclear = true;
+                }
             }
+            else
+            {
+                gameend = true;
+                gameover = true;
+            } 
             if(firstclick) 
             {
                 place_bomb();
@@ -60,6 +73,16 @@ int main()
             break;
         }
         write_map();
+    }
+    if(gameover)
+    {
+        cout << "Game Over!\n";
+        _getch();
+    }
+    if(gameclear)
+    {
+        cout << "Game Clear!\n";
+        _getch();
     }
 }
 
