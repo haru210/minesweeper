@@ -27,15 +27,19 @@ void place_number();
 int main()
 {
     srand(time(NULL));
+    cout << "操作説明\n";
+    cout << "WASDで◎ の移動、スペースでマスオープン、BackSpaceで強制終了\n";
+    cout << "任意のキー入力でスタート\n";
+    _getch();
     cout << "爆弾数を入力してね！(1~99)\n";
     cin >> bomb_number;
     if(bomb_number < 0 || bomb_number > 99)
     {
-        cout << "は？やる気ある？もっかいちゃんとやって？\n";
+        cout << "正しい値を入力してね！\n";
         cin >> bomb_number;
         if(bomb_number < 0 || bomb_number > 99)
         {
-            cout << "日本語読めるようになってから来いや\n";
+            cout << "貴様は間違いを犯しすぎた。\n";
             _getch();
             return 0;
         }
