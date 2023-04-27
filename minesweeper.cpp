@@ -5,6 +5,7 @@
 #include <time.h>
 using namespace std;
 
+
 int map[10][10] = {0}; //0~8を数字ます、-1を爆弾マスとする
 int bomb[12][12] = {0};
 bool opened[10][10] = {0};
@@ -12,6 +13,7 @@ bool opened[10][10] = {0};
 int selected_x = 0;
 int selected_y = 0;
 int open_cnt = 0;
+int bomb_number;
 
 bool gameend = false;
 bool firstclick = true;
@@ -25,6 +27,19 @@ void place_number();
 int main()
 {
     srand(time(NULL));
+    cout << "爆弾数を入力してね！(1~99)\n";
+    cin >> bomb_number;
+    if(bomb_number < 0 || bomb_number > 99)
+    {
+        cout << "は？やる気ある？もっかいちゃんとやって？\n";
+        cin >> bomb_number;
+        if(bomb_number < 0 || bomb_number > 99)
+        {
+            cout << "日本語読めるようになってから来いや\n";
+            _getch();
+            return 0;
+        }
+    }
     write_map();
     while(!gameend)
     {
@@ -49,9 +64,12 @@ int main()
             case ' ':
             if(map[selected_y][selected_x] != -1)
             {
-                opened[selected_y][selected_x] = true;
-                open_cnt++;
-                if(open_cnt >= 90)
+                if(opened[selected_y][selected_x] == false)
+                {
+                    opened[selected_y][selected_x] = true;      
+                    open_cnt++;
+                }
+                if(open_cnt >= 100 - bomb_number)
                 {
                     gameend = true;
                     gameclear = true;
@@ -81,6 +99,7 @@ int main()
     }
     if(gameclear)
     {
+        write_map();
         cout << "Game Clear!" << endl;
         _getch();
     }
@@ -92,7 +111,7 @@ void write_map()
     {
         for(int j = 0; j < 10; j++)
         {
-            if(selected_x == j && selected_y == i)
+            if(selected_x == j && selected_y == i && gameclear == false)
             {
                 cout << "◎" << ' ';
             }
@@ -129,7 +148,7 @@ void place_bomb()
 {
     int bomb_x, bomb_y;
     int i = 0;
-    for(int i = 0;i < 10; i++)
+    for(int i = 0;i < bomb_number; i++)
     {
         bomb_x = rand() % 10;
         bomb_y = rand() % 10;
