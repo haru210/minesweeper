@@ -81,7 +81,7 @@ int main()
     }
     if(gameclear)
     {
-        cout << "Game Clear!\n";
+        cout << "Game Clear!" << endl;
         _getch();
     }
 }
