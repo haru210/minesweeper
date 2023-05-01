@@ -6,9 +6,10 @@
 using namespace std;
 
 
-int map[12][12] = {0}; //0~8を数字ます、-1を爆弾マスとする
+int map[12][12] = {0}; //0を数字ます、-1を爆弾マス、1を旗マスとする
 int bomb[12][12] = {0};
-bool opened[12][12] = {0};
+bool opened[12][12] = {false};
+bool flag[12][12] = {false};
 
 int selected_x = 1;
 int selected_y = 1;
@@ -75,6 +76,17 @@ int main()
             }
             break;
 
+            case 'f':
+            if(!flag[selected_y][selected_x])
+            {
+                flag[selected_y][selected_x] = true;
+            }
+            else
+            {
+                flag[selected_y][selected_x] = false; 
+            }
+            break;
+
             case '\b':
             gameend = true;
             break;
@@ -103,6 +115,10 @@ void write_map()
             if(selected_x == j && selected_y == i && gameclear == false)
             {
                 cout << "◎" << ' ';
+            }
+            else if(flag[i][j])
+            {
+                cout << "□" << ' ';
             }
             else if(!opened[i][j])
             {
@@ -192,6 +208,7 @@ void open(int y, int x)
     if(y > 0 && y < 11 && x > 0 && x < 11)
     {
         if(opened[y][x]) return;
+        if(flag[y][x]) return;
         if(map[y][x] != -1){
             opened[y][x] = true;
             if(firstclick)
