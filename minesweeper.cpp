@@ -32,7 +32,7 @@ int main()
 {
     srand(time(NULL));
     cout << "操作説明\n";
-    cout << "WASDで◎ の移動、スペースでマスオープン、BackSpaceで強制終了\n";
+    cout << "WASDで◎ の移動、スペースでマスオープンとコーディング、Fで旗立て、BackSpaceで強制終了\n";
     cout << "任意のキー入力でスタート\n";
     _getch();
     cout << "爆弾数を入力してね！(1~99)\n";
