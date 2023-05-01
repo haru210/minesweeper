@@ -8,6 +8,7 @@ using namespace std;
 
 int map[12][12] = {0}; //0を数字ます、-1を爆弾マス、1を旗マスとする
 int bomb[12][12] = {0};
+int flags[12][12] = {0};
 bool opened[12][12] = {false};
 bool flag[12][12] = {false};
 
@@ -23,7 +24,8 @@ bool gameclear = false;
 void write_map();
 void place_bomb();
 void place_number();
-void open(int y, int x);
+void open(int y, int x, bool code);
+void build_flag(int y, int x);
 bool sweepedcheck(int bomb);
 
 int main()
@@ -68,7 +70,14 @@ int main()
             break;
 
             case ' ':
-            open(selected_y, selected_x);
+            if(!opened[selected_y][selected_x])
+            {
+                open(selected_y, selected_x, false);
+            }
+            else
+            {
+                open(selected_y, selected_x, true);
+            }
             if(sweepedcheck(bomb_number))
             {
                 gameend = true;
@@ -77,14 +86,7 @@ int main()
             break;
 
             case 'f':
-            if(!flag[selected_y][selected_x])
-            {
-                flag[selected_y][selected_x] = true;
-            }
-            else
-            {
-                flag[selected_y][selected_x] = false; 
-            }
+            build_flag(selected_y, selected_x);
             break;
 
             case '\b':
@@ -203,10 +205,21 @@ bool sweepedcheck(int bomb)
     }
 }
     
-void open(int y, int x)
+void open(int y, int x, bool code)
 {
     if(y > 0 && y < 11 && x > 0 && x < 11)
     {
+        if(code && flags[y][x] == bomb[y][x])
+        {
+            open(y+1, x+1, false);
+            open(y+1, x, false);        
+            open(y+1, x-1, false);        
+            open(y, x+1, false);        
+            open(y, x-1, false);        
+            open(y-1, x-1, false);        
+            open(y-1, x, false);      
+            open(y-1, x+1, false);
+        }
         if(opened[y][x]) return;
         if(flag[y][x]) return;
         if(map[y][x] != -1){
@@ -216,16 +229,16 @@ void open(int y, int x)
                 place_bomb();
                 firstclick = false;
             }
-            if(bomb[y][x] == 0)
+            if(bomb[y][x] == 0 && !code)
             {
-                open(y+1, x+1);
-                open(y+1, x);        
-                open(y+1, x-1);        
-                open(y, x+1);        
-                open(y, x-1);        
-                open(y-1, x-1);        
-                open(y-1, x);      
-                open(y-1, x+1);
+                open(y+1, x+1, false);
+                open(y+1, x, false);        
+                open(y+1, x-1, false);        
+                open(y, x+1, false);        
+                open(y, x-1, false);        
+                open(y-1, x-1, false);        
+                open(y-1, x, false);      
+                open(y-1, x+1, false);
             }
         }
         else
@@ -234,4 +247,33 @@ void open(int y, int x)
             gameover = true;
         }
     }
+}
+
+void build_flag(int y, int x)
+{
+    if(!flag[y][x])
+    {
+        flag[y][x] = true;
+        flags[y+1][x+1]++;
+        flags[y+1][x]++;
+        flags[y+1][x-1]++;
+        flags[y][x+1]++;
+        flags[y][x-1]++;
+        flags[y-1][x-1]++;
+        flags[y-1][x]++;
+        flags[y-1][x+1]++;
+    }
+    else
+    {
+        flag[y][x] = false;
+        flags[y+1][x+1]++;
+        flags[y+1][x]++;
+        flags[y+1][x-1]++;
+        flags[y][x+1]++;
+        flags[y][x-1]++;
+        flags[y-1][x-1]++;
+        flags[y-1][x]++;
+        flags[y-1][x+1]++;
+    }
+
 }
